@@ -88,3 +88,7 @@ There is no way to run SteamCMD in "silent mode" or any equivalent, and redirect
 **I ended the script early and it left a hidden file in my current working dir. Is that safe to delete?**
 
 The script uses temporary files to make steamcmd work. These can be safely deleted
+
+**I am getting some weird SteamCMD errors, like Error! App '<num>' state is 0x202 after update job**
+
+SteamCMD is a little buggy and unreliable. Error 0x202 usually means you don't have enough disk space.
