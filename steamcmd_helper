@@ -1,15 +1,17 @@
-#!/bin/bash
+#!/bin/sh
 
 #display help when we have wrong number of arguments
 #or we type "--help"
-if [ $# -lt 2 ] || [ $1 == "--help" ]; then
+if [ "$#" -lt 2 ] || [ "$1" = "--help" ]; then
     echo "usage: $0 <steamapps> <steam_app_ids>"
     echo "will download game with <app_id> to <steamapps>/common/<game name>"
     echo "<steamapps> must be a valid steamapps folder"
     echo "the file steamcmd_settings.txt will automatically be passed to steamcmd as a script file."
     echo "Do your account etc. setup in that file."
-    echo "If it doesn't exist, there will NOT be an opportunity to login to steam as part of this script,"
-    echo "meaning most likely it will not work at all"
+    echo "If it doesn't exist, there will NOT be an opportunity to login to steam as part of this script, meaning most likely it will not work at all"
+    echo ""
+    echo "See here for more details:"
+    echo "https://developer.valvesoftware.com/wiki/SteamCMD#Automating_SteamCMD"
     echo ""
     echo "appids should be space separated"
     echo "appids can be found at https://steamdb.info/"
@@ -17,9 +19,14 @@ if [ $# -lt 2 ] || [ $1 == "--help" ]; then
 fi
 
 #PROCESS FIRST ARGUMENT
-if ! [ -d "$1/common" ]; then
-#if ! [ -d "$1/common" ] || ! [ -f "$1/libraryfolders.vdf" ]; then
+if ! [ -d "$1" ]; then
     echo "$1 is not a valid path"
+    exit 1
+elif ! [ -d "$1/common" ]; then
+    echo "$1 does not contain a 'common' folder. Is it a valid steamapps directory?"
+    exit 1
+elif ( echo "$1" | grep -q ' ' ); then
+    echo 'your steamapps path contains spaces. Due to limitations with steamCMD, this script will not function. Exiting'
     exit 1
 fi
 
@@ -88,7 +95,7 @@ do
         #remove the temp file we created
         rm -f "$temp/appid.txt"
 
-        if [ "$installdir" == "" ]; then
+        if [ "$installdir" = "" ]; then
             echo "an error occurred retrieving the app information for appid ${arg}"
             continue
         fi
@@ -134,7 +141,6 @@ do
         #there is a confirmation step too, just in case. But it's slow
         #because of the lack of -r, it should theoretically be impossible
         #for this to wipe out the real steamapps dir, in case anything really, really bad happens
-        #echo 'going to remove "'${dir}'/steamapps" symlink. Please verify that the following is correct...'
         rm -f "$real_install_dir/steamapps"
 
         #remove random EmptySteamDepot folder (likely a bug in SteamCMD)
