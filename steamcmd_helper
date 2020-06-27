@@ -19,12 +19,9 @@ if [ "$#" -lt 2 ] || [ "$1" = "--help" ]; then
 fi
 
 #PROCESS FIRST ARGUMENT
-if ! [ -d "$1" ]; then
-    echo "$1 is not a valid path. Exiting..."
-    exit 1
-elif ! [ -d "$1/common" ]; then
-    echo "$1 does not contain a 'common' folder. Exiting..."
-    exit 1
+if ! [ -d "$1" ] || ! [ -d "$1/common" ]; then
+    echo "$1 is not a valid steamapps directory. Creating a new directory at $1"
+    mkdir -p "$1/common"
 fi
 
 #generate our command line string
@@ -35,7 +32,7 @@ options_path=$(realpath ./steamcmd_settings.txt)
 if [ -f "$options_path" ]; then
     script=' +runscript "'${options_path}'"'
 else
-    echo "$options_path not found. No login data available. Exiting..."
+    echo "$options_path not found. SteamCMD will be unable to login. Exiting..."
     exit 1
 fi
 
@@ -57,9 +54,6 @@ do
             ''|*[!0-9]*) echo "($arg)" contains non-numeric characters. Skipping && continue ;;
             *) ;;
         esac
-
-        #clear out our temp dir
-        rm -f "$real_install_dir"
 
         appid_file="./.appid.steamcmd"
 
