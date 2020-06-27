@@ -20,13 +20,10 @@ fi
 
 #PROCESS FIRST ARGUMENT
 if ! [ -d "$1" ]; then
-    echo "$1 is not a valid path."
+    echo "$1 is not a valid path. Exiting..."
     exit 1
 elif ! [ -d "$1/common" ]; then
-    echo "$1 does not contain a 'common' folder."
-    exit 1
-elif ( echo "$1" | grep -q ' ' ); then
-    echo 'your steamapps path contains spaces. Due to limitations with steamCMD, this script will not function.'
+    echo "$1 does not contain a 'common' folder. Exiting..."
     exit 1
 fi
 
@@ -35,10 +32,11 @@ command="steamcmd"
 options_path=$(realpath ./steamcmd_settings.txt)
 
 #add our options file if it exists
-if [ -f "./steamcmd_settings.txt" ]; then
+if [ -f "$options_path" ]; then
     script=' +runscript "'${options_path}'"'
 else
-    script=""
+    echo "$options_path not found. No login data available. Exiting..."
+    exit 1
 fi
 
 
