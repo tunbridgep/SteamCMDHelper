@@ -1,3 +1,8 @@
 //steamCMD settings
-//@sSteamCmdForcePlatformType windows     //install Windows games
-login <your username> <your password>     //you can also just type your username here and it will prompt you for a password instead
+
+//install Windows games
+//@sSteamCmdForcePlatformType windows
+
+//login <username> <password>
+//only <username> is required. See README.md for info
+login <username> <password>
