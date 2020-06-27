@@ -125,7 +125,6 @@ do
         processed=$((processed + 1))
 
         #remove unneeded steamapps link left over
-        #there is a confirmation step too, just in case. But it's slow
         #because of the lack of -r, it should theoretically be impossible
         #for this to wipe out the real steamapps dir, in case anything really, really bad happens
         rm -f "$dir/steamapps"
@@ -150,5 +149,5 @@ done
 if [ $processed -gt 0 ]; then
     echo "finished. Processed $processed downloads: $processed_list"
 else
-    echo "finished. Processed $processed downloads."
+    echo "finished. No downloads."
 fi
