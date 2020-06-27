@@ -35,6 +35,8 @@ It cleans up the symbolic links after creation, and is able to run multiple appi
 
 Simply download steamcmd_helper and steamcmd_settings.txt, then either invoke the script from it's directory or add it to your path.
 
+You will need [steamcmd](https://developer.valvesoftware.com/wiki/SteamCMD#Linux) installed and on your path to use this scrips
+
 ## Usage ##
 
 SteamCMDHelper can be used to download multiple applications in sequence. It can be invoked with the following syntax:
