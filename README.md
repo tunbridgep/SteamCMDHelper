@@ -71,7 +71,7 @@ The script needs to know where your steamapps folder is so that it can create a 
 
 **Where do I place steamcmd_settings.txt?**
 
-In the current working directory. This would normally be your home directory, but it doesn't have to be, as long as you run the script from the same place. If the file is not present, nothing will break, but steamcmd will likely ask you to login which may or may not work correctly.
+In the current working directory. This would normally be your home directory, but it doesn't have to be, as long as you run the script from the same place.
 
 **I have found a bug or have a feature suggestion. What can I do?**
 
