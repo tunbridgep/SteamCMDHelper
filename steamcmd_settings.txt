@@ -1,0 +1,5 @@
+//steamCMD settings
+@ShutdownOnFailedCommand 1
+@NoPromptForPassword 1
+@sSteamCmdForcePlatformType windows
+login <your_login>
