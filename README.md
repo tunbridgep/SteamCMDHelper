@@ -31,7 +31,9 @@ SteamCMD Helper automates this process in the following ways:
 
 ## Installation ##
 
-Simply download steamcmd_helper and steamcmd_settings.txt, then either invoke the script from it's directory or add it to your path
+Simply download steamcmd_helper and steamcmd_settings.txt, then either invoke the script from it's directory or add it to your path.
+
+Please keep in mind your steamapps folder needs to be in a path with no spaces (the script will check for this), because of an existing bug in SteamCMD
 
 ## Usage ##
 
@@ -43,12 +45,26 @@ If I wanted to download Half-Life 2 and Boneworks to my steamapps folder, I coul
 
     steamcmd_helper "/home/user/.steam/steamapps/" 220 823500
     
-Any additional commands placed in the file steamcmd_settings.txt will be sent to steamcmd using the [+runscript](https://developer.valvesoftware.com/wiki/SteamCMD#Automating_SteamCMD) command. A sample steamcmd_settings.txt file is provided. This can be used to input user information and force SteamCMD to download windows versions of games (for a dual boot, or for playing with Wine/Proton etc)
+Any additional commands placed in the file steamcmd_settings.txt will be sent to steamcmd using the [+runscript](https://developer.valvesoftware.com/wiki/SteamCMD#Automating_SteamCMD) command. A sample steamcmd_settings.txt file is provided. This can be used to input user information and force SteamCMD to download windows versions of games (for a dual boot, or for playing with Wine/Proton etc). You should modify this program before first running the script, as you will need to tell it your login information (only your username)
 
 Help can be provided with
 
     steamcmd_helper --help
+
+## Troubleshooting ##
+
+In order to download games using SteamCMD, you will need to provide login details. If you do not do this, you will get the following error:
+
+    ERROR! Failed to request AppInfo update, not online or not logged in to Steam.
     
+This is because SteamCMD is trying to work in "anonymous" mode. The solution is to make sure you have your username set in the login field in steamcmd_settings.txt (like in the sample file), 
+
+If the script gets stuck on the following command:
+    
+    Logging in user '<your user name>' to Steam Public ...
+    
+It isn't stuck. You simply need to type your password and press enter to continue. This should only be required the first time you use the script.
+
 ## FAQ ##
 
 *Why do I have to specify my steamapps folder every time?*
@@ -59,3 +75,16 @@ In the current working directory. This would normally be your home directory, bu
 
 *I have found a bug or have a feature suggestion. What can I do?*
 You can report bugs or request new features on the issues page. I also accept pull requests.
+
+*Why does the script produce so much extra unnecessary output?*
+There is no way to run SteamCMD in "silent mode" or any equivalent, and redirecting output to a file is problematic as it can hide login prompts etc.
+
+*I ended the script early and it left a steamcmd_temp folder in my steamapps folder. Is this safe to delete?*
+Yes. This is cleaned up at the end of the script. If you quit early for whatever reason, it won't be cleaned up. It is safe to delete.
+
+*Why do you bother creating a temp folder in my steamapps folder, why not just go straight to the right folder in the first place?*
+Because of the steamCMD folder path spaces bug. Many games have spaces in their folder names and steamCMD would download to the wrong place otherwise.
+
+## Future Plans ##
+
+SteamCMD has no issues if it takes its folder path from a steamcmd script file rather than the command line. I might modify the script to create a temporary script file instead of using the workarounds I have been using currently.

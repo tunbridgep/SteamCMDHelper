@@ -1,5 +1,4 @@
 //steamCMD settings
 @ShutdownOnFailedCommand 1
-//@NoPromptForPassword 1                //don't ask for a password. This is recommended, see the readme for info
-//@sSteamCmdForcePlatformType windows   //install Windows games
-login <your_login>
+//@sSteamCmdForcePlatformType windows     //install Windows games
+login <your user name>

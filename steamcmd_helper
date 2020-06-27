@@ -20,13 +20,13 @@ fi
 
 #PROCESS FIRST ARGUMENT
 if ! [ -d "$1" ]; then
-    echo "$1 is not a valid path"
+    echo "$1 is not a valid path."
     exit 1
 elif ! [ -d "$1/common" ]; then
-    echo "$1 does not contain a 'common' folder. Is it a valid steamapps directory?"
+    echo "$1 does not contain a 'common' folder."
     exit 1
 elif ( echo "$1" | grep -q ' ' ); then
-    echo 'your steamapps path contains spaces. Due to limitations with steamCMD, this script will not function. Exiting'
+    echo 'your steamapps path contains spaces. Due to limitations with steamCMD, this script will not function.'
     exit 1
 fi
 
@@ -70,7 +70,8 @@ do
 
         #so, we have validated our appid. Now we need to get it's folder information
         #echo "$command$script +app_info_print "${arg}" +quit"
-        $(eval "$command$script +app_info_print "${arg}" +quit > $temp/appid.txt")
+        
+        eval "$command$script +app_info_print "${arg}" +quit | tee $temp/appid.txt"
 
         #now that we have the app info in a file, we can grep it for the install directory
         #I better explain this monstrosity because it's awful.
