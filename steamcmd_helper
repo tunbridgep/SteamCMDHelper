@@ -36,10 +36,6 @@ else
     exit 1
 fi
 
-
-#PROCESS ALL OTHER ARGUMENTS
-#These should be strings in the form a=b, each separated by a space
-
 #process each argument
 count=0
 processed=0
