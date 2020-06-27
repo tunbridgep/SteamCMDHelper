@@ -1,4 +1,3 @@
 //steamCMD settings
-@ShutdownOnFailedCommand 1
 //@sSteamCmdForcePlatformType windows     //install Windows games
-login <your user name>
+login <your username> <your password>     //you can also just type your username here and it will prompt you for a password instead

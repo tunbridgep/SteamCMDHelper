@@ -41,11 +41,6 @@ else
     script=""
 fi
 
-#make our temp folder
-#temp="$HOME/.steam/steamcmd/temp"
-temp="$1/steamcmd_temp"
-real_install_dir="$temp/game"
-mkdir -p "$temp"
 
 #PROCESS ALL OTHER ARGUMENTS
 #These should be strings in the form a=b, each separated by a space
@@ -68,10 +63,10 @@ do
         #clear out our temp dir
         rm -f "$real_install_dir"
 
+        appid_file="./.appid.steamcmd"
+
         #so, we have validated our appid. Now we need to get it's folder information
-        #echo "$command$script +app_info_print "${arg}" +quit"
-        
-        eval "$command$script +app_info_print "${arg}" +quit | tee $temp/appid.txt"
+        eval "$command$script +app_info_print "${arg}" +quit | tee $appid_file"
 
         #now that we have the app info in a file, we can grep it for the install directory
         #I better explain this monstrosity because it's awful.
@@ -87,14 +82,14 @@ do
         #but since we are already using quotes for our eval, we have to use strings of different type
         #it would look much better spaced out, but cut complains if we do that
         #this should make more sense: cut -d'  "'" <-left  '"' <-delim "'" <-right ' -f4'
-        installdir=$(eval 'grep -m 1 -w -e "installdir" $temp/appid.txt | cut -d '"'"'"'"'"' -f4')
-        appname=$(eval 'grep -m 1 -w -e "name" $temp/appid.txt | cut -d '"'"'"'"'"' -f4')
+        installdir=$(eval 'grep -m 1 -w -e "installdir" $appid_file | cut -d '"'"'"'"'"' -f4')
+        appname=$(eval 'grep -m 1 -w -e "name" $appid_file | cut -d '"'"'"'"'"' -f4')
         echo "==========================================="
         echo "App Name: "$appname
         echo "==========================================="
 
         #remove the temp file we created
-        rm -f "$temp/appid.txt"
+        rm -f "$appid_file"
 
         if [ "$installdir" = "" ]; then
             echo "an error occurred retrieving the app information for appid ${arg}"
@@ -112,28 +107,32 @@ do
         #make a directory for our game
         mkdir -p "$dir"
 
-        #now that our dir is created, point our game dir there
-        #echo ln -s "$dir" "$real_install_dir"
-        ln -s "$dir" "$real_install_dir"
-
         #we need to make a symlink to our steamapps dir
         #inside the folder for the game we are downloading
         #because of a quirk with the way that SteamCMD works
-        if ! [ -L "$real_install_dir/steamapps" ]; then
-            #echo ln -s "$1" "$real_install_dir/steamapps"
-            ln -s "$1" "$real_install_dir/steamapps"
+        if ! [ -L "$dir/steamapps" ]; then
+            ln -s "$1" "$dir/steamapps"
         fi
 
-        #we need to create strings the tool will recognise
-        #by setting the install dir and telling it
-        #to update and validate various games
+        #we need to tell the tool where to install our games, which we can do by
+        #writing 'force_install_dir' into a temporary run script
+        dir_string='force_install_dir "'$dir'"'
+        script_file="./.force_install_dir.steamcmd"
+        echo "$dir_string" > "$script_file"
+        echo "@ShutdownOnFailedCommand 1" >> "$script_file" #not sure if this is required
+        script_file_path=$(realpath "${script_file}")
+        script2=$script' +runscript "'${script_file_path}'"'
+        
+        #update and validate our apps
         #validation is technically options, but recommended
-        dir_string=' +force_install_dir "'$real_install_dir'"'
         app_string=" +app_update $arg validate"
 
         #and now we are ready to go
-        #echo "$command$script$dir_string$app_string +quit"
-        eval "$command$script$dir_string$app_string +quit"
+        #echo "$command$script$app_string +quit"
+        eval "$command$script$script2$app_string +quit"
+        
+        #remove the temp file we created
+        rm -f "$script_file"
 
         #keep track of how many downloads we processed
         processed=$((processed + 1))
@@ -142,11 +141,11 @@ do
         #there is a confirmation step too, just in case. But it's slow
         #because of the lack of -r, it should theoretically be impossible
         #for this to wipe out the real steamapps dir, in case anything really, really bad happens
-        rm -f "$real_install_dir/steamapps"
+        rm -f "$dir/steamapps"
 
         #remove random EmptySteamDepot folder (likely a bug in SteamCMD)
-        if [ -d "$real_install_dir/EmptySteamDepot" ]; then
-                rm -rf "$real_install_dir/EmptySteamDepot"
+        if [ -d "$dir/EmptySteamDepot" ]; then
+                rm -rf "$dir/EmptySteamDepot"
         fi
 
         #add appname to our list of processed apps
@@ -166,6 +165,3 @@ if [ $processed -gt 0 ]; then
 else
     echo "finished. Processed $processed downloads."
 fi
-        
-#remove our temp directory
-rm -rf "$temp"
