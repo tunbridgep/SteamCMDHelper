@@ -23,21 +23,21 @@ We could use steamcmd to install it to a more specific location - namely the ste
 2. SteamCMD has a bug where +force_install_dir refuses to work with spaces, meaning this will be placed in the "Half-Life" directory rather than the "Half-Life 2" directory.
 3. SteamCMD creates a separate steamapps folder inside our game folder, which means the Steam client won't properly recognise the game install, and won't be able to recognise partial downloads
 
-SteamCMD Helper automates this process in the following ways:
+SteamCMDHelper automates this process in the following ways:
 
 1. It fetches the correct steamapps/common folder name for a specified appid
 2. It creates the directory in the steamapps/common folder, then symlinks the steamapps folder inside it
-3. It calls steamCMD with the appropriate arguments
+3. It calls SteamCMD with the appropriate arguments
+
+It cleans up the symbolic links after creation, and is able to run multiple appids in sequence.
 
 ## Installation ##
 
 Simply download steamcmd_helper and steamcmd_settings.txt, then either invoke the script from it's directory or add it to your path.
 
-Please keep in mind your steamapps folder needs to be in a path with no spaces (the script will check for this), because of an existing bug in SteamCMD
-
 ## Usage ##
 
-SteamCMDHelper can be used to download multiple applications in sequence. It can be invoked with the following syntax
+SteamCMDHelper can be used to download multiple applications in sequence. It can be invoked with the following syntax:
 
     steamcmd_helper "<steamapps path>" <appid> { <appid> }...
     
@@ -45,7 +45,7 @@ If I wanted to download Half-Life 2 and Boneworks to my steamapps folder, I coul
 
     steamcmd_helper "/home/user/.steam/steamapps/" 220 823500
     
-Any additional commands placed in the file steamcmd_settings.txt will be sent to steamcmd using the [+runscript](https://developer.valvesoftware.com/wiki/SteamCMD#Automating_SteamCMD) command. A sample steamcmd_settings.txt file is provided. This can be used to input user information as well as force SteamCMD to download windows versions of games (for a dual boot, or for playing with Wine/Proton etc). You should modify this file before first running the script, as you will need to tell it your login information (only your username is required)
+SteamCMD will log in using the username and password provided in the file steamcmd_settings.txt, which will be sent to it using the [+runscript](https://developer.valvesoftware.com/wiki/SteamCMD#Automating_SteamCMD) command. A sample steamcmd_settings.txt file is provided. Additional commands can be added here as well, such as forcing SteamCMD to download Windows versions of games (for a dual boot, or for playing with Wine/Proton etc). You should modify this file before first running the script, as you will need to insert your login information (only your username is required)
 
 Help can be provided with
 
@@ -57,11 +57,11 @@ In order to download games using SteamCMD, you will need to provide login detail
 
     ERROR! Failed to request AppInfo update, not online or not logged in to Steam.
     
-This is because SteamCMD is trying to work in "anonymous" mode. The solution is to make sure you have your username and password set in the login field in steamcmd_settings.txt (like in the sample file). If you do not wish to type this information, providing just your username is enough. If the script gets stuck on the following command:
+This is because SteamCMD is trying to work in "anonymous" mode. The solution is to make sure you have your username and password set in the login field in steamcmd_settings.txt (like in the sample file). If you do not wish to store this information, providing just your username is enough. If the script gets stuck on the following command:
     
     Logging in user '<your user name>' to Steam Public ...
     
-It isn't stuck. You simply need to type your password and press enter to continue. This should only be required the first time you use the script.
+It isn't stuck. You simply need to type your password and press enter to continue. This should only be required the first time you use the script if you don't provide your password in the file.
 
 ## FAQ ##
 
