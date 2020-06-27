@@ -20,8 +20,7 @@ fi
 
 #PROCESS FIRST ARGUMENT
 if ! [ -d "$1" ] || ! [ -d "$1/common" ]; then
-    echo "$1 is not a valid steamapps directory. Creating a new directory at $1"
-    mkdir -p "$1/common"
+    echo "$1 is not an existing steamapps directory. Creating a new directory at $1"
 fi
 
 #generate our command line string
