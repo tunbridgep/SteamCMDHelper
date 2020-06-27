@@ -65,20 +65,26 @@ It isn't stuck. You simply need to type your password and press enter to continu
 
 ## FAQ ##
 
-*Why do I have to specify my steamapps folder every time?*
+**Why do I have to specify my steamapps folder every time?**
+
 The script needs to know where your steamapps folder is so that it can create a link to it
 
-*Where do I place steamcmd_settings.txt?*
+**Where do I place steamcmd_settings.txt?**
+
 In the current working directory. This would normally be your home directory, but it doesn't have to be, as long as you run the script from the same place. If the file is not present, nothing will break, but steamcmd will likely ask you to login which may or may not work correctly.
 
-*I have found a bug or have a feature suggestion. What can I do?*
+**I have found a bug or have a feature suggestion. What can I do?**
+
 You can report bugs or request new features on the issues page. I also accept pull requests.
 
-*The code kind of sucks*
+**The code kind of sucks**
+
 Yes. It needs a refactor. I am not the best shell scripter out there, but if you feel like you want to help rewrite it, I accept pull requests.
 
-*Why does the script produce so much extra unnecessary output?*
+**Why does the script produce so much extra unnecessary output?**
+
 There is no way to run SteamCMD in "silent mode" or any equivalent, and redirecting output to a file is problematic as it can hide login prompts etc.
 
-*I ended the script early and it left a hidden file in my current working dir. Is that safe to delete?*
+**I ended the script early and it left a hidden file in my current working dir. Is that safe to delete?**
+
 The script uses temporary files to make steamcmd work. These can be safely deleted
